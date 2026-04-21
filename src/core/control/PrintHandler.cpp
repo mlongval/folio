@@ -5,7 +5,8 @@
 #include <string>  // for string
 
 #include <cairo.h>        // for cairo_rotate, cairo_translate, cairo_t
-#include <config-dev.h>   // for PRINT_CONFIG_FILE
+#include <config-dev.h>  // for PRINT_CONFIG_FILE
+#include "config.h"      // for APP_NAME
 #include <glib-object.h>  // for g_object_unref, G_CALLBACK, g_signa...
 #include <glib.h>         // for GError, g_error_free, g_warning
 
@@ -104,7 +105,7 @@ void PrintHandler::print(Document* doc, size_t currentPage, GtkWindow* parent) {
     gtk_print_operation_set_print_settings(op, settings);
     gtk_print_operation_set_n_pages(op, strict_cast<int>(doc->getPageCount()));
     gtk_print_operation_set_current_page(op, strict_cast<int>(currentPage));
-    gtk_print_operation_set_job_name(op, "Xournal++");
+    gtk_print_operation_set_job_name(op, APP_NAME);
     gtk_print_operation_set_unit(op, GTK_UNIT_POINTS);
     gtk_print_operation_set_use_full_page(op, true);
     g_signal_connect(op, "draw_page", G_CALLBACK(drawPage), doc);

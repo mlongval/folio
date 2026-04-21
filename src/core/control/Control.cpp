@@ -2071,7 +2071,7 @@ void Control::updateWindowTitle() {
     }
     this->doc->unlock_shared();
 
-    title += " - Xournal++";
+    title += std::string(" - ") + APP_NAME;
 
     gtk_window_set_title(getGtkWindow(), title.c_str());
 }

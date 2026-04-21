@@ -44,6 +44,29 @@ constexpr auto PROJECT_HOMEPAGE_URL = "@PROJECT_HOMEPAGE_URL@";
 constexpr int FILE_FORMAT_VERSION = @DEV_FILE_FORMAT_VERSION@;
 
 
+/* --- App identity (configurable at build time) --- */
+
+/**
+ * Display name of the application (window title, print jobs, dialogs)
+ */
+constexpr auto APP_NAME = "@APP_NAME@";
+
+/**
+ * Reverse-DNS application identifier (GApplication ID, D-Bus, icon name)
+ */
+constexpr auto APP_ID = "@APP_ID@";
+
+/**
+ * User config folder name under XDG_CONFIG_HOME
+ */
+constexpr auto APP_CONFIG_FOLDER = "@APP_CONFIG_FOLDER@";
+
+/**
+ * Name of the main executable that the crash-wrapper launches
+ */
+constexpr auto APP_WRAPPER_BINARY = "@APP_WRAPPER_BINARY@";
+
+
 /* --- I18N --- */
 
 /**

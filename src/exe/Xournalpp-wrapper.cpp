@@ -121,7 +121,7 @@ auto main(int argc, char* argv[]) -> int {
         std::vector<const char*> subargv;
         std::cout << Util::getExePath() << std::endl;
 
-        const std::u8string path = (Util::getExePath() / "xournalpp").u8string();
+        const std::u8string path = (Util::getExePath() / APP_WRAPPER_BINARY).u8string();
         subargv.emplace_back(char_cast(path.c_str()));  // Data is owned by `path` - Do not delete it
         errorlog << "Executing \"" << char_cast(path);
 
@@ -233,7 +233,7 @@ auto main(int argc, char* argv[]) -> int {
 #endif
     }
 
-    GtkApplication* app = gtk_application_new("com.github.xournalpp.xournalpp", G_APPLICATION_FLAGS_NONE);
+    GtkApplication* app = gtk_application_new(APP_ID, G_APPLICATION_FLAGS_NONE);
     g_signal_connect_data(app, "activate", xoj::util::wrap_for_g_callback_v<activate>, new std::string(errorlog.str()),
                           xoj::util::closure_notify_cb<std::string>, GConnectFlags(0));
 
