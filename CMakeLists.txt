@@ -20,9 +20,9 @@ endif()
 
 ## Project related Variables
 ## Also update changelog in debian folder!
-project(xournalpp
+project(folio
         VERSION 1.3.4
-        DESCRIPTION "Xournal++ - Open source hand note-taking program"
+        DESCRIPTION "Folio - PDF typewriter and annotator"
         HOMEPAGE_URL "https://xournalpp.github.io/"
         LANGUAGES CXX C)
 # according to https://cmake.org/cmake/help/latest/command/project.html we must fix the suffix:
@@ -32,6 +32,12 @@ set(PROJECT_VERSION "${PROJECT_VERSION}${VERSION_SUFFIX}")
 set(xournalpp_VERSION ${PROJECT_VERSION})
 set(CMAKE_PROJECT_VERSION ${PROJECT_VERSION})
 set(PROJECT_CONTACT "core.xournalpp@github.com")
+
+## App identity — change these to rebrand the application
+set(APP_NAME           "Folio")
+set(APP_ID             "io.github.folio")
+set(APP_CONFIG_FOLDER  "folio")
+set(APP_WRAPPER_BINARY "folio")
 
 ## CMAKE_Variables
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/find" "${PROJECT_SOURCE_DIR}/cmake/include")
@@ -382,19 +388,19 @@ add_subdirectory (man)
 
 # Install resources
 install(DIRECTORY ui
-        DESTINATION "share/xournalpp"
+        DESTINATION "share/folio"
         COMPONENT xournalpp
         )
 install(DIRECTORY plugins
-        DESTINATION "share/xournalpp"
+        DESTINATION "share/folio"
         COMPONENT xournalpp
         )
 install(DIRECTORY resources
-        DESTINATION "share/xournalpp"
+        DESTINATION "share/folio"
         COMPONENT xournalpp
         )
 install(DIRECTORY palettes
-        DESTINATION "share/xournalpp"
+        DESTINATION "share/folio"
         COMPONENT xournalpp
         )
 
@@ -404,7 +410,8 @@ if (${INSTALL_DESKTOP_FILES})
 
     # Install icons
     install(FILES ui/pixmaps/com.github.xournalpp.xournalpp.svg
-            DESTINATION share/icons/hicolor/scalable/apps)
+            DESTINATION share/icons/hicolor/scalable/apps
+            RENAME io.github.folio.svg)
     install(FILES ui/pixmaps/application-x-xopp.svg
             DESTINATION share/icons/hicolor/scalable/mimetypes/)
     install(FILES ui/pixmaps/application-x-xopt.svg
@@ -460,8 +467,8 @@ set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION}~git${PACKAGE_TIMESTAMP}-${RELEASE_IDENTIFIER}-${DISTRO_CODENAME})
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/package_description")
 set(CPACK_PACKAGE_CONTACT "${PROJECT_CONTACT}")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Xournal++")
-set(CPACK_PACKAGE_FILE_NAME "xournalpp-${PROJECT_VERSION}-${DISTRO_NAME}-${DISTRO_CODENAME}-${PACKAGE_ARCH}")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Folio")
+set(CPACK_PACKAGE_FILE_NAME "folio-${PROJECT_VERSION}-${DISTRO_NAME}-${DISTRO_CODENAME}-${PACKAGE_ARCH}")
 set(CPACK_OUTPUT_FILE_PREFIX packages)
 set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE")
 set(CPACK_STRIP_FILES ON) # Debian packages must be stripped from debug messages, so lintian doesn't complain

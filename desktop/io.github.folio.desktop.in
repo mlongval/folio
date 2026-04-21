@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+
+Name=Folio
+GenericName=PDF typewriter and annotator
+Comment=Type and annotate on PDF files
+Keywords=tablet;Wacom;pen input;PDF Annotation;markup;journal;handwriting;diary;notes;PDF;typewriter;
+
+Exec=folio-wrapper %f
+SingleMainWindow=false
+StartupWMClass=io.github.folio
+Terminal=false
+StartupNotify=true
+MimeType=application/x-xoj;application/x-xojpp;application/x-xopp;application/x-xopt;application/pdf
+Icon=io.github.folio
+Categories=Office;GNOME;GTK

@@ -25,7 +25,7 @@ if (XGETTEXT_FOUND)
       "${PROJECT_SOURCE_DIR}/ui/*.glade;${PROJECT_SOURCE_DIR}/ui/*.xml"
 
     DESKTOPFILES
-      "${PROJECT_SOURCE_DIR}/desktop/com.github.xournalpp.xournalpp.desktop.in"
+      "${PROJECT_SOURCE_DIR}/desktop/io.github.folio.desktop.in"
 
     INIFILES
       "${PROJECT_SOURCE_DIR}/resources-templates/pagetemplates.ini.in;${PROJECT_SOURCE_DIR}/resources-templates/toolbar.ini.in"

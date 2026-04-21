@@ -43,7 +43,7 @@ add_subdirectory(core)
 # The crash dialog's ui file is stored as gresource to make sure the wrapper is standalone
 find_program(GLIB_COMPILE_RESOURCES NAMES glib-compile-resources REQUIRED)
 
-set(XOURNAL_WRAPPER_GRESOURCE_C   xournalpp-wrapper.gresource.c)
+set(XOURNAL_WRAPPER_GRESOURCE_C   folio-wrapper.gresource.c)
 set(XOURNAL_WRAPPER_GRESOURCE_XML exe/xournalpp-wrapper.gresource.xml)
 
 add_custom_command(
@@ -62,33 +62,33 @@ add_custom_command(
 )
 
 add_custom_target(
-    xournalpp-wrapper-resource
+    folio-wrapper-resource
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${XOURNAL_WRAPPER_GRESOURCE_C}
 )
 
-add_executable(xournalpp-wrapper exe/Xournalpp-wrapper.cpp ${CMAKE_CURRENT_BINARY_DIR}/${XOURNAL_WRAPPER_GRESOURCE_C})
+add_executable(folio-wrapper exe/Xournalpp-wrapper.cpp ${CMAKE_CURRENT_BINARY_DIR}/${XOURNAL_WRAPPER_GRESOURCE_C})
 set_source_files_properties(
     ${CMAKE_CURRENT_BINARY_DIR}/${XOURNAL_WRAPPER_GRESOURCE_C}
     PROPERTIES GENERATED TRUE
 )
 
-add_dependencies(xournalpp-wrapper xournalpp-wrapper-resource)
-target_link_libraries(xournalpp-wrapper
+add_dependencies(folio-wrapper folio-wrapper-resource)
+target_link_libraries(folio-wrapper
         PUBLIC xoj::defaults xoj::util xoj::external_modules)
-set_target_properties(xournalpp-wrapper PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+set_target_properties(folio-wrapper PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
         MACOSX_BUNDLE $<IF:$<PLATFORM_ID:Darwin>,TRUE,${CMAKE_MACOSX_BUNDLE}>
         WIN32_EXECUTABLE $<IF:$<PLATFORM_ID:Windows>,TRUE,${CMAKE_WIN32_EXECUTABLE}>
         )
-target_include_directories(xournalpp-wrapper PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(folio-wrapper PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
 ##############################
 # xournalpp main program
 ##############################
 
-add_executable(xournalpp exe/Xournalpp.cpp)
-target_link_libraries(xournalpp PRIVATE xoj::core xoj::util)
-set_target_properties(xournalpp PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+add_executable(folio exe/Xournalpp.cpp)
+target_link_libraries(folio PRIVATE xoj::core xoj::util)
+set_target_properties(folio PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
         MACOSX_BUNDLE $<IF:$<PLATFORM_ID:Darwin>,TRUE,${CMAKE_MACOSX_BUNDLE}>
         WIN32_EXECUTABLE $<IF:$<PLATFORM_ID:Windows>,TRUE,${CMAKE_WIN32_EXECUTABLE}>
         )
@@ -162,11 +162,11 @@ endif ()
 # Until here
 ################################
 
-install(TARGETS xournalpp-wrapper
+install(TARGETS folio-wrapper
         RUNTIME DESTINATION bin
         COMPONENT xournalpp-wrapper
         )
-install(TARGETS xournalpp
+install(TARGETS folio
         RUNTIME DESTINATION bin
         COMPONENT xournalpp
         )
