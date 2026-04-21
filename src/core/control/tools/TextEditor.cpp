@@ -1,8 +1,6 @@
 #include "TextEditor.h"
 
-#include <algorithm>  // for std::min_element, std::max_element
-#include <cmath>      // for std::cos, std::sin
-#include <cstring>    // for strcmp, size_t
+#include <cstring>  // for strcmp, size_t
 #include <memory>   // for allocator, make_unique, __shared_p...
 #include <string>   // for std::string()
 #include <utility>  // for move
@@ -876,13 +874,8 @@ void TextEditor::blinkCallback(TextEditor* te) {
     auto time = te->cursorVisible ? te->cursorBlinkingTimeOn : te->cursorBlinkingTimeOff;
     te->blinkTimer = g_timeout_add(time, xoj::util::wrap_for_once_v<blinkCallback>, te);
 
-    Range dirtyRange = (te->textElement->getRotation() != 0.0)
-                               ? te->previousBoundingBox
-                               : [&] {
-                                     Range r = te->cursorBox;
-                                     r.translate(te->textElement->getX(), te->textElement->getY());
-                                     return r;
-                                 }();
+    Range dirtyRange = te->cursorBox;
+    dirtyRange.translate(te->textElement->getX(), te->textElement->getY());
     te->viewPool->dispatch(xoj::view::TextEditionView::FLAG_DIRTY_REGION, dirtyRange);
 }
 
@@ -941,20 +934,6 @@ auto TextEditor::computeBoundingBox() const -> Range {
     double x = textElement->getX();
     double y = textElement->getY();
 
-    if (double r = textElement->getRotation(); r != 0.0) {
-        double c = std::cos(r);
-        double s = std::sin(r);
-        double dxs[4] = {0.0, width * c, -height * s, width * c - height * s};
-        double dys[4] = {0.0, width * s,  height * c, width * s + height * c};
-        double minX = x + *std::min_element(dxs, dxs + 4);
-        double maxX = x + *std::max_element(dxs, dxs + 4);
-        double minY = y + *std::min_element(dys, dys + 4);
-        double maxY = y + *std::max_element(dys, dys + 4);
-        Range res(minX, minY);
-        res.addPoint(maxX, maxY);
-        return res;
-    }
-
     // Warning: width can be negative (e.g. for languages written from right to left)
     Range res(x, y);
     res.addPoint(x + width, y + height);
@@ -1010,14 +989,10 @@ void TextEditor::repaintEditor(bool sizeChanged) {
 }
 
 void TextEditor::repaintCursorAfterChange() {
+    Range dirtyRange = this->cursorBox;
     this->updateCursorBox();
-    Range dirtyRange = (this->textElement->getRotation() != 0.0)
-                               ? this->previousBoundingBox
-                               : [&] {
-                                     Range r = this->cursorBox;
-                                     r.translate(this->textElement->getX(), this->textElement->getY());
-                                     return r;
-                                 }();
+    dirtyRange = dirtyRange.unite(this->cursorBox);
+    dirtyRange.translate(this->textElement->getX(), this->textElement->getY());
     this->viewPool->dispatch(xoj::view::TextEditionView::FLAG_DIRTY_REGION, dirtyRange);
 }
 
@@ -1047,6 +1022,12 @@ void TextEditor::finalizeEdition() {
     }
 
     this->updateTextElementContent();
+    if (this->savedRotation != 0.0) {
+        // Restore the rotation we stripped on edit init, pivoting around the current anchor.
+        this->textElement->rotate(this->textElement->getX(), this->textElement->getY(),
+                                  this->savedRotation);
+        this->savedRotation = 0.0;
+    }
     if (originalTextElement) {
         // Modifying a preexisting element
         this->viewPool->dispatchAndClear(xoj::view::TextEditionView::FINALIZATION_REQUEST, this->previousBoundingBox);
@@ -1120,6 +1101,14 @@ void TextEditor::initializeEditionAt(double x, double y) {
         this->originalTextElement = text;
 
         this->textElement = text->cloneText();
+
+        // Edit the clone un-rotated. Pivoting around the anchor (x,y) zeroes the angle
+        // without moving the anchor, so re-applying it on finalize is exactly reversible.
+        this->savedRotation = this->textElement->getRotation();
+        if (this->savedRotation != 0.0) {
+            this->textElement->rotate(this->textElement->getX(), this->textElement->getY(),
+                                      -this->savedRotation);
+        }
 
         text->setInEditing(true);
         this->page->fireElementChanged(text);

@@ -184,6 +184,13 @@ private:
     Range previousBoundingBox;
     Range cursorBox;
 
+    /**
+     * @brief Rotation angle saved when editing began. The working clone is un-rotated
+     * (rotation set to 0) for editing so the cursor/layout stay axis-aligned; this value
+     * is restored before the clone replaces the original on finalize.
+     */
+    double savedRotation = 0.0;
+
     std::shared_ptr<xoj::util::DispatchPool<xoj::view::TextEditionView>> viewPool;
 
     /**
