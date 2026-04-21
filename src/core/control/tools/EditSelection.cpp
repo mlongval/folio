@@ -1116,13 +1116,13 @@ void EditSelection::paint(cairo_t* cr, double zoom) {
             drawAnchorRect(cr, x, y + height / 2, zoom);
             // right
             drawAnchorRect(cr, x + width, y + height / 2, zoom);
+        }
 
-            if (supportRotation) {
-                // rotation handle
-                drawAnchorRotation(cr,
-                                   std::min(x, x + width) + std::abs(width) + (ROTATE_PADDING + this->btnWidth) / zoom,
-                                   y + height / 2, zoom);
-            }
+        if (supportRotation) {
+            // rotation handle
+            drawAnchorRotation(cr,
+                               std::min(x, x + width) + std::abs(width) + (ROTATE_PADDING + this->btnWidth) / zoom,
+                               y + height / 2, zoom);
         }
 
         // top left
