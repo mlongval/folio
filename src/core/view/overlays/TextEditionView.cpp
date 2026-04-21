@@ -42,9 +42,15 @@ void TextEditionView::draw(cairo_t* cr) const {
         cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
         cairo_set_source_rgb(cr, 1, 1, 1);
         const Text* textElement = this->textEditor->getTextElement();
-        cairo_rectangle(cr, cursorBox.minX + textElement->getX(), cursorBox.minY + textElement->getY(),
-                        cursorBox.getWidth(), cursorBox.getHeight());
-        cairo_fill(cr);
+        {
+            xoj::util::CairoSaveGuard cursorGuard(cr);
+            cairo_translate(cr, textElement->getX(), textElement->getY());
+            if (double r = textElement->getRotation(); r != 0.0) {
+                cairo_rotate(cr, r);
+            }
+            cairo_rectangle(cr, cursorBox.minX, cursorBox.minY, cursorBox.getWidth(), cursorBox.getHeight());
+            cairo_fill(cr);
+        }
     }
 }
 
@@ -56,6 +62,9 @@ void TextEditionView::drawWithoutDrawingAids(cairo_t* cr) const {
 
     // From now on, coordinates are in textElement coordinates
     cairo_translate(cr, textElement->getX(), textElement->getY());
+    if (double r = textElement->getRotation(); r != 0.0) {
+        cairo_rotate(cr, r);
+    }
 
     // The data is owned by textEditor
     PangoLayout* layout = this->textEditor->getUpToDateLayout();
