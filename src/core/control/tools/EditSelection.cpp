@@ -438,7 +438,8 @@ void EditSelection::addElement(ElementPtr eOwned, Element::Index order) {
     this->contents->addElement(std::move(eOwned), order);
     this->preserveAspectRatio = this->preserveAspectRatio || e->rescaleOnlyAspectRatio();
     this->supportMirroring = this->supportMirroring && e->rescaleWithMirror();
-    this->supportRotation = this->supportRotation && e->getType() == ELEMENT_STROKE;
+    this->supportRotation = this->supportRotation &&
+                            (e->getType() == ELEMENT_STROKE || e->getType() == ELEMENT_TEXT);
 }
 
 /**
