@@ -162,8 +162,8 @@ void ToolHandler::initTools() {
     this->mouseButton5Tool = std::make_unique<Tool>(*tools[TOOL_HIGHLIGHTER - TOOL_PEN]);
     this->touchDrawingButtonTool = std::make_unique<Tool>(*tools[TOOL_HIGHLIGHTER - TOOL_PEN]);
 
-    this->toolbarSelectedTool = &getTool(TOOL_PEN);
-    this->activeTool = &getTool(TOOL_PEN);
+    this->toolbarSelectedTool = &getTool(TOOL_SELECT_OBJECT);
+    this->activeTool = &getTool(TOOL_SELECT_OBJECT);
 }
 
 ToolHandler::~ToolHandler() {
