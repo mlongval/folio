@@ -1,7 +1,8 @@
 #include "TextEditor.h"
 
-#include <cmath>    // for std::abs, std::cos, std::sin
-#include <cstring>  // for strcmp, size_t
+#include <algorithm>  // for std::min_element, std::max_element
+#include <cmath>      // for std::cos, std::sin
+#include <cstring>    // for strcmp, size_t
 #include <memory>   // for allocator, make_unique, __shared_p...
 #include <string>   // for std::string()
 #include <utility>  // for move
@@ -941,14 +942,16 @@ auto TextEditor::computeBoundingBox() const -> Range {
     double y = textElement->getY();
 
     if (double r = textElement->getRotation(); r != 0.0) {
-        double c = std::abs(std::cos(r));
-        double s = std::abs(std::sin(r));
-        double aabbW = std::abs(width) * c + height * s;
-        double aabbH = std::abs(width) * s + height * c;
-        double cx = x + width / 2.0;
-        double cy = y + height / 2.0;
-        Range res(cx - aabbW / 2.0, cy - aabbH / 2.0);
-        res.addPoint(cx + aabbW / 2.0, cy + aabbH / 2.0);
+        double c = std::cos(r);
+        double s = std::sin(r);
+        double dxs[4] = {0.0, width * c, -height * s, width * c - height * s};
+        double dys[4] = {0.0, width * s,  height * c, width * s + height * c};
+        double minX = x + *std::min_element(dxs, dxs + 4);
+        double maxX = x + *std::max_element(dxs, dxs + 4);
+        double minY = y + *std::min_element(dys, dys + 4);
+        double maxY = y + *std::max_element(dys, dys + 4);
+        Range res(minX, minY);
+        res.addPoint(maxX, maxY);
         return res;
     }
 

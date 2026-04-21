@@ -191,18 +191,19 @@ void Text::updateSnapping() const {
         this->snappedBounds = Rectangle<double>(this->x, this->y, this->width, this->height);
         return;
     }
-    // Compute axis-aligned bounding box of the rotated text rectangle.
-    // The four corners of the unrotated box relative to (x, y) are:
-    //   (0,0), (w,0), (w,h), (0,h)
-    // After rotation by `rotation` around (x, y):
-    double c = std::abs(std::cos(this->rotation));
-    double s = std::abs(std::sin(this->rotation));
-    double aabbW = this->width * c + this->height * s;
-    double aabbH = this->width * s + this->height * c;
-    // The rotated box is centered on the same center as the unrotated box.
-    double cx = this->x + this->width / 2.0;
-    double cy = this->y + this->height / 2.0;
-    this->snappedBounds = Rectangle<double>(cx - aabbW / 2.0, cy - aabbH / 2.0, aabbW, aabbH);
+    // AABB of the rotated text rectangle.
+    // Rendering is cairo_translate(x,y) then cairo_rotate(r), so the pivot is the
+    // top-left corner (x,y). Compute the 4 corner offsets and take min/max.
+    double c = std::cos(this->rotation);
+    double s = std::sin(this->rotation);
+    double w = this->width, h = this->height;
+    double dxs[4] = {0.0, w * c, -h * s, w * c - h * s};
+    double dys[4] = {0.0, w * s,  h * c, w * s + h * c};
+    double minX = *std::min_element(dxs, dxs + 4);
+    double maxX = *std::max_element(dxs, dxs + 4);
+    double minY = *std::min_element(dys, dys + 4);
+    double maxY = *std::max_element(dys, dys + 4);
+    this->snappedBounds = Rectangle<double>(this->x + minX, this->y + minY, maxX - minX, maxY - minY);
 }
 
 auto Text::findText(const std::string& search) const -> std::vector<XojPdfRectangle> {
