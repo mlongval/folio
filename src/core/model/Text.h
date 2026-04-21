@@ -54,6 +54,8 @@ public:
     void scale(double x0, double y0, double fx, double fy, double rotation, bool restoreLineWidth) override;
     void rotate(double x0, double y0, double th) override;
 
+    double getRotation() const;
+
     bool rescaleOnlyAspectRatio() const override;
 
     auto cloneText() const -> std::unique_ptr<Text>;
@@ -75,6 +77,8 @@ private:
     XojFont font;
 
     std::string text;
+
+    double rotation = 0.0;  // radians, accumulated via rotate()
 
     bool inEditing = false;
 };

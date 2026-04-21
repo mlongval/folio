@@ -436,7 +436,9 @@ void XmlParser::parseTextTag(const XmlParserHelper::AttributeMap& attributeMap) 
                 XmlParserHelper::getAttribMandatory<size_t>(xoj::xml_attrs::TIMESTAMP_STR, attributeMap, 0UL);
     }
 
-    this->builder.addText(std::string{font}, size, x, y, color, std::move(tempFilename), tempTimestamp);
+    const auto rotation = XmlParserHelper::getAttrib<double>(xoj::xml_attrs::ROTATION_STR, attributeMap).value_or(0.0);
+
+    this->builder.addText(std::string{font}, size, x, y, color, std::move(tempFilename), tempTimestamp, rotation);
 
     this->tempTimestamp = 0;
 }

@@ -1,5 +1,6 @@
 #include "Text.h"
 
+#include <cmath>    // for cos, sin, abs
 #include <memory>
 #include <utility>  // for move
 
@@ -35,6 +36,7 @@ auto Text::cloneText() const -> std::unique_ptr<Text> {
     text->y = this->y;
     text->width = this->width;
     text->height = this->height;
+    text->rotation = this->rotation;
     text->cloneAudioData(this);
     text->snappedBounds = this->snappedBounds;
     text->sizeCalculated = this->sizeCalculated;
@@ -131,7 +133,21 @@ void Text::scale(double x0, double y0, double fx, double fy, double rotation,
     sizeCalculated = false;
 }
 
-void Text::rotate(double x0, double y0, double th) {}
+void Text::rotate(double x0, double y0, double th) {
+    // Rotate the text's anchor point (top-left) around (x0, y0)
+    double dx = this->x - x0;
+    double dy = this->y - y0;
+    double c = std::cos(th);
+    double s = std::sin(th);
+    this->x = x0 + dx * c - dy * s;
+    this->y = y0 + dx * s + dy * c;
+
+    // Accumulate the visual rotation angle
+    this->rotation += th;
+    this->sizeCalculated = false;
+}
+
+auto Text::getRotation() const -> double { return this->rotation; }
 
 auto Text::isInEditing() const -> bool { return this->inEditing; }
 
@@ -146,6 +162,8 @@ void Text::serialize(ObjectOutputStream& out) const {
 
     font.serialize(out);
 
+    out.writeDouble(this->rotation);
+
     out.endObject();
 }
 
@@ -158,11 +176,33 @@ void Text::readSerialized(ObjectInputStream& in) {
 
     font.readSerialized(in);
 
+    // rotation was added later; default to 0 if not present
+    try {
+        this->rotation = in.readDouble();
+    } catch (...) {
+        this->rotation = 0.0;
+    }
+
     in.endObject();
 }
 
 void Text::updateSnapping() const {
-    this->snappedBounds = Rectangle<double>(this->x, this->y, this->width, this->height);
+    if (this->rotation == 0.0) {
+        this->snappedBounds = Rectangle<double>(this->x, this->y, this->width, this->height);
+        return;
+    }
+    // Compute axis-aligned bounding box of the rotated text rectangle.
+    // The four corners of the unrotated box relative to (x, y) are:
+    //   (0,0), (w,0), (w,h), (0,h)
+    // After rotation by `rotation` around (x, y):
+    double c = std::abs(std::cos(this->rotation));
+    double s = std::abs(std::sin(this->rotation));
+    double aabbW = this->width * c + this->height * s;
+    double aabbH = this->width * s + this->height * c;
+    // The rotated box is centered on the same center as the unrotated box.
+    double cx = this->x + this->width / 2.0;
+    double cy = this->y + this->height / 2.0;
+    this->snappedBounds = Rectangle<double>(cx - aabbW / 2.0, cy - aabbH / 2.0, aabbW, aabbH);
 }
 
 auto Text::findText(const std::string& search) const -> std::vector<XojPdfRectangle> {

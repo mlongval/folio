@@ -44,6 +44,9 @@ void TextView::draw(const Context& ctx) const {
     }
 
     cairo_translate(ctx.cr, text->getX(), text->getY());
+    if (double r = text->getRotation(); r != 0.0) {
+        cairo_rotate(ctx.cr, r);
+    }
 
     auto layout = initPango(ctx.cr, text);
     const std::string& content = text->getText();

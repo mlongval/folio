@@ -194,6 +194,10 @@ void SaveHandler::visitLayer(XmlNode* page, const Layer* l) {
             text->setAttrib(xoj::xml_attrs::Y_COORD_STR, t->getY());
             text->setAttrib(xoj::xml_attrs::COLOR_STR, getColorStr(t->getColor()).c_str());
 
+            if (t->getRotation() != 0.0) {
+                text->setAttrib(xoj::xml_attrs::ROTATION_STR, t->getRotation());
+            }
+
             writeTimestamp(text, t);
         } else if (e->getType() == ELEMENT_IMAGE) {
             auto* i = dynamic_cast<const Image*>(e);
