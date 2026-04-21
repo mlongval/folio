@@ -5,11 +5,6 @@
    <attribute name="label" translatable="yes">_File</attribute>
    <section id="menu1">
     <item>
-     <attribute name="label" translatable="true">New</attribute>
-     <attribute name="action">win.new-file</attribute>
-     <attribute name="accel">&lt;Ctrl&gt;n</attribute>
-    </item>
-    <item>
      <attribute name="label" translatable="yes">Open</attribute>
      <attribute name="action">win.open</attribute>
      <attribute name="accel">&lt;Ctrl&gt;o</attribute>
@@ -649,18 +644,10 @@
      <attribute name="class">audio</attribute> <!-- Gets removed when audio is disabled -->
     </item>
     <item>
-     <attribute name="label" translatable="yes">H_and Tool</attribute>
+     <attribute name="label" translatable="yes">_Pan (Scroll Canvas)</attribute>
      <attribute name="action">win.select-tool</attribute>
      <attribute name="target" type="t">13</attribute> <!-- TOOL_HAND -->
      <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;a</attribute>
-    </item>
-    <item>
-     <attribute name="label" translatable="yes">Setsquare</attribute>
-     <attribute name="action">win.setsquare</attribute>
-    </item>
-    <item>
-     <attribute name="label" translatable="yes">Compass</attribute>
-     <attribute name="action">win.compass</attribute>
     </item>
    </section>
    <section>

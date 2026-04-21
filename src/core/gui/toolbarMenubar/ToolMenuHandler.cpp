@@ -447,7 +447,7 @@ void ToolMenuHandler::initToolItems() {
                                 _("Vertical Space"));
     emplaceCustomItemWithTarget("PLAY_OBJECT", Cat::SELECTION, Action::SELECT_TOOL, TOOL_PLAY_OBJECT, "object-play",
                                 _("Play Object"));
-    emplaceCustomItemWithTarget("HAND", Cat::SELECTION, Action::SELECT_TOOL, TOOL_HAND, "hand", _("Hand"));
+    emplaceCustomItemWithTarget("HAND", Cat::SELECTION, Action::SELECT_TOOL, TOOL_HAND, "hand", _("Pan (Scroll Canvas)"));
 
     emplaceItem<FontButton>("SELECT_FONT", *control->getActionDatabase());
 
