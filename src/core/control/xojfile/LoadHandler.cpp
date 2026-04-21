@@ -350,7 +350,7 @@ void LoadHandler::finalizeStroke() {
 }
 
 void LoadHandler::addText(std::string font, double size, double x, double y, Color color, fs::path filename,
-                          size_t timestamp, double rotation) {
+                          size_t timestamp, double rotation, bool underline) {
     xoj_assert(!this->text);
     this->text = std::make_unique<Text>();
 
@@ -362,6 +362,9 @@ void LoadHandler::addText(std::string font, double size, double x, double y, Col
     this->text->setColor(color);
     if (rotation != 0.0) {
         this->text->rotate(x, y, rotation);
+    }
+    if (underline) {
+        this->text->setUnderline(true);
     }
 
     setAudioAttributes(*this->text, std::move(filename), timestamp);

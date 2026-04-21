@@ -423,6 +423,12 @@ auto EditSelection::setColor(Color color) -> UndoActionPtr { return this->conten
  */
 auto EditSelection::setFont(const XojFont& font) -> UndoActionPtr { return this->contents->setFont(font); }
 
+void EditSelection::setUnderline(bool underline) { this->contents->setUnderline(underline); }
+
+void EditSelection::setBold(bool bold) { this->contents->setBold(bold); }
+
+void EditSelection::setItalic(bool italic) { this->contents->setItalic(italic); }
+
 /**
  * Fills de undo item if the selection is deleted
  * the selection is cleared after

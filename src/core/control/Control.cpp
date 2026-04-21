@@ -2601,6 +2601,80 @@ void Control::fontChanged(const XojFont& font) {
     }
 }
 
+static auto applyFontBold(const std::string& name, bool bold) -> std::string {
+    std::string result = name;
+    auto pos = result.find(" Bold");
+    if (bold && pos == std::string::npos) {
+        result += " Bold";
+    } else if (!bold && pos != std::string::npos) {
+        result.erase(pos, 5);
+    }
+    return result;
+}
+
+static auto applyFontItalic(const std::string& name, bool italic) -> std::string {
+    std::string result = name;
+    auto pos = result.find(" Italic");
+    if (italic && pos == std::string::npos) {
+        result += " Italic";
+    } else if (!italic && pos != std::string::npos) {
+        result.erase(pos, 7);
+    }
+    return result;
+}
+
+void Control::setTextBold(bool bold) {
+    if (this->win) {
+        if (EditSelection* sel = this->win->getXournal()->getSelection(); sel) {
+            sel->setBold(bold);
+            return;
+        }
+    }
+    if (TextEditor* editor = getTextEditor(); editor) {
+        XojFont& font = editor->getTextElement()->getFont();
+        font.setName(applyFontBold(font.getName(), bold));
+        editor->afterFontChange();
+        this->actionDB->setActionState(Action::FONT, editor->getTextElement()->getFont().asString().c_str());
+    }
+}
+
+void Control::setTextItalic(bool italic) {
+    if (this->win) {
+        if (EditSelection* sel = this->win->getXournal()->getSelection(); sel) {
+            sel->setItalic(italic);
+            return;
+        }
+    }
+    if (TextEditor* editor = getTextEditor(); editor) {
+        XojFont& font = editor->getTextElement()->getFont();
+        font.setName(applyFontItalic(font.getName(), italic));
+        editor->afterFontChange();
+        this->actionDB->setActionState(Action::FONT, editor->getTextElement()->getFont().asString().c_str());
+    }
+}
+
+void Control::setTextUnderline(bool underline) {
+    if (this->win) {
+        if (EditSelection* sel = this->win->getXournal()->getSelection(); sel) {
+            sel->setUnderline(underline);
+            return;
+        }
+    }
+    if (TextEditor* editor = getTextEditor(); editor) {
+        editor->getTextElement()->setUnderline(underline);
+        editor->afterFontChange();
+    }
+}
+
+void Control::syncTextFormattingState(const XojFont& font, bool underline) {
+    const std::string& name = font.getName();
+    bool bold = name.find(" Bold") != std::string::npos;
+    bool italic = name.find(" Italic") != std::string::npos;
+    this->actionDB->setActionState(Action::TEXT_BOLD, bold);
+    this->actionDB->setActionState(Action::TEXT_ITALIC, italic);
+    this->actionDB->setActionState(Action::TEXT_UNDERLINE, underline);
+}
+
 /**
  * The core handler for inserting latex
  */

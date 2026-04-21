@@ -250,6 +250,56 @@ auto EditSelectionContents::setFont(const XojFont& font) -> UndoActionPtr {
     return nullptr;
 }
 
+void EditSelectionContents::setUnderline(bool underline) {
+    for (Element* e: this->selected) {
+        if (e->getType() == ELEMENT_TEXT) {
+            dynamic_cast<Text*>(e)->setUnderline(underline);
+        }
+    }
+    this->deleteViewBuffer();
+    this->sourceView->getXournal()->repaintSelection();
+}
+
+void EditSelectionContents::setBold(bool bold) {
+    for (Element* e: this->selected) {
+        if (e->getType() == ELEMENT_TEXT) {
+            auto* t = dynamic_cast<Text*>(e);
+            XojFont font = t->getFont();
+            std::string name = font.getName();
+            auto pos = name.find(" Bold");
+            if (bold && pos == std::string::npos) {
+                name += " Bold";
+            } else if (!bold && pos != std::string::npos) {
+                name.erase(pos, 5);
+            }
+            font.setName(name);
+            t->setFont(font);
+        }
+    }
+    this->deleteViewBuffer();
+    this->sourceView->getXournal()->repaintSelection();
+}
+
+void EditSelectionContents::setItalic(bool italic) {
+    for (Element* e: this->selected) {
+        if (e->getType() == ELEMENT_TEXT) {
+            auto* t = dynamic_cast<Text*>(e);
+            XojFont font = t->getFont();
+            std::string name = font.getName();
+            auto pos = name.find(" Italic");
+            if (italic && pos == std::string::npos) {
+                name += " Italic";
+            } else if (!italic && pos != std::string::npos) {
+                name.erase(pos, 7);
+            }
+            font.setName(name);
+            t->setFont(font);
+        }
+    }
+    this->deleteViewBuffer();
+    this->sourceView->getXournal()->repaintSelection();
+}
+
 /**
  * Set the line style of all strokes, return an undo action
  * (Or nullptr if nothing done)

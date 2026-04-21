@@ -99,7 +99,7 @@ private:
     void setStrokePoints(std::vector<Point> pointVector, bool hasPressure) override;
     void finalizeStroke() override;
     void addText(std::string font, double size, double x, double y, Color color, fs::path filename,
-                 size_t timestamp, double rotation = 0.0) override;
+                 size_t timestamp, double rotation = 0.0, bool underline = false) override;
     void setTextContents(std::string contents) override;
     void finalizeText() override;
     void addImage(double left, double top, double right, double bottom) override;

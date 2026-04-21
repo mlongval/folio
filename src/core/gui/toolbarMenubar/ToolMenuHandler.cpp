@@ -498,6 +498,11 @@ void ToolMenuHandler::initToolItems() {
                                      {_("Highlighter"), laserIcon, TOOL_LASER_POINTER_HIGHLIGHTER}},
             this->control->getActionDatabase()->getAction(Action::SELECT_TOOL));
 
+    // Text formatting
+    emplaceStockItemTgl("TEXT_BOLD", Cat::TOOLS, Action::TEXT_BOLD, "format-text-bold", _("Bold"));
+    emplaceStockItemTgl("TEXT_ITALIC", Cat::TOOLS, Action::TEXT_ITALIC, "format-text-italic", _("Italic"));
+    emplaceStockItemTgl("TEXT_UNDERLINE", Cat::TOOLS, Action::TEXT_UNDERLINE, "format-text-underline", _("Underline"));
+
     // General tool configuration - working for every tool which support it
     emplaceCustomItemTgl("TOOL_FILL", Cat::TOOLS, Action::TOOL_FILL, "fill", _("Fill"));
     emplaceCustomItem("FILL_OPACITY", Cat::TOOLS, Action::TOOL_FILL_OPACITY, "fill-opacity", _("Fill Opacity"));

@@ -85,6 +85,8 @@ public:
     void pasteFromClipboard();
     void selectAtCursor(TextEditor::SelectType ty);
 
+    void afterFontChange();  ///< Call after modifying textElement font to repaint and sync layout
+
 private:
     void toggleOverwrite();
     void toggleBoldFace();
@@ -95,7 +97,6 @@ private:
     void linebreak();
     void tabulation();
 
-    void afterFontChange();
     void replaceBufferContent(const std::string& text);
 
     void finalizeEdition();

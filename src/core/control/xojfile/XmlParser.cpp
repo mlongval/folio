@@ -437,8 +437,10 @@ void XmlParser::parseTextTag(const XmlParserHelper::AttributeMap& attributeMap) 
     }
 
     const auto rotation = XmlParserHelper::getAttrib<double>(xoj::xml_attrs::ROTATION_STR, attributeMap).value_or(0.0);
+    const auto underline = XmlParserHelper::getAttrib<int>(xoj::xml_attrs::UNDERLINE_STR, attributeMap).value_or(0) != 0;
 
-    this->builder.addText(std::string{font}, size, x, y, color, std::move(tempFilename), tempTimestamp, rotation);
+    this->builder.addText(std::string{font}, size, x, y, color, std::move(tempFilename), tempTimestamp, rotation,
+                          underline);
 
     this->tempTimestamp = 0;
 }

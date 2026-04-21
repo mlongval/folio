@@ -52,6 +52,7 @@ constexpr auto SIZE_STR = u8"size";
 constexpr auto X_COORD_STR = u8"x";
 constexpr auto Y_COORD_STR = u8"y";
 constexpr auto ROTATION_STR = u8"rotation";
+constexpr auto UNDERLINE_STR = u8"underline";
 
 // image
 constexpr auto LEFT_POS_STR = u8"left";      // also in teximage

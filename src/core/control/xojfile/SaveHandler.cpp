@@ -197,6 +197,9 @@ void SaveHandler::visitLayer(XmlNode* page, const Layer* l) {
             if (t->getRotation() != 0.0) {
                 text->setAttrib(xoj::xml_attrs::ROTATION_STR, t->getRotation());
             }
+            if (t->isUnderline()) {
+                text->setAttrib(xoj::xml_attrs::UNDERLINE_STR, 1);
+            }
 
             writeTimestamp(text, t);
         } else if (e->getType() == ELEMENT_IMAGE) {

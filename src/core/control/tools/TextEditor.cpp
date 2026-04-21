@@ -1002,6 +1002,7 @@ void TextEditor::finalizeEdition() {
     UndoRedoHandler* undo = this->control->getUndoRedoHandler();
 
     this->control->setFontSelected(this->control->getSettings()->getFont());
+    this->control->syncTextFormattingState(this->control->getSettings()->getFont(), false);
 
     if (this->bufferEmpty()) {
         // Delete the edited element from layer
@@ -1098,6 +1099,7 @@ void TextEditor::initializeEditionAt(double x, double y) {
         this->originalTextElement = nullptr;
     } else {
         this->control->setFontSelected(text->getFont());
+        this->control->syncTextFormattingState(text->getFont(), text->isUnderline());
         this->originalTextElement = text;
 
         this->textElement = text->cloneText();

@@ -139,6 +139,9 @@ enum class Action : size_t {
 
     SELECT_FONT,
     FONT,  ///< Action whose state is the font's description
+    TEXT_BOLD,
+    TEXT_ITALIC,
+    TEXT_UNDERLINE,
     TEX,
 
     // Plugin Menu

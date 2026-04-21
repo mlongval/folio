@@ -37,6 +37,7 @@ auto Text::cloneText() const -> std::unique_ptr<Text> {
     text->width = this->width;
     text->height = this->height;
     text->rotation = this->rotation;
+    text->underline = this->underline;
     text->cloneAudioData(this);
     text->snappedBounds = this->snappedBounds;
     text->sizeCalculated = this->sizeCalculated;
@@ -89,6 +90,10 @@ void Text::setHeight(double height) {
 
 void Text::setInEditing(bool inEditing) { this->inEditing = inEditing; }
 
+void Text::setUnderline(bool underline) { this->underline = underline; }
+
+auto Text::isUnderline() const -> bool { return this->underline; }
+
 auto Text::createPangoLayout() const -> xoj::util::GObjectSPtr<PangoLayout> {
     xoj::util::GObjectSPtr<PangoContext> c(pango_font_map_create_context(pango_cairo_font_map_get_default()),
                                            xoj::util::adopt);
@@ -100,6 +105,13 @@ auto Text::createPangoLayout() const -> xoj::util::GObjectSPtr<PangoLayout> {
 #endif
 
     updatePangoFont(layout.get());
+
+    if (this->underline) {
+        PangoAttrList* attrs = pango_attr_list_new();
+        pango_attr_list_insert(attrs, pango_attr_underline_new(PANGO_UNDERLINE_SINGLE));
+        pango_layout_set_attributes(layout.get(), attrs);
+        pango_attr_list_unref(attrs);
+    }
 
     return layout;
 }
@@ -163,6 +175,7 @@ void Text::serialize(ObjectOutputStream& out) const {
     font.serialize(out);
 
     out.writeDouble(this->rotation);
+    out.writeInt(this->underline ? 1 : 0);
 
     out.endObject();
 }
@@ -176,11 +189,15 @@ void Text::readSerialized(ObjectInputStream& in) {
 
     font.readSerialized(in);
 
-    // rotation was added later; default to 0 if not present
     try {
         this->rotation = in.readDouble();
     } catch (...) {
         this->rotation = 0.0;
+    }
+    try {
+        this->underline = in.readInt() != 0;
+    } catch (...) {
+        this->underline = false;
     }
 
     in.endObject();

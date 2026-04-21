@@ -180,6 +180,9 @@ public:
      * (or nullptr if there are no Text elements)
      */
     UndoActionPtr setFont(const XojFont& font);
+    void setUnderline(bool underline);
+    void setBold(bool bold);
+    void setItalic(bool italic);
 
     /**
      * Fills the undo item if the selection is deleted

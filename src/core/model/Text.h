@@ -48,6 +48,9 @@ public:
     void setInEditing(bool inEditing);
     bool isInEditing() const;
 
+    void setUnderline(bool underline);
+    bool isUnderline() const;
+
     xoj::util::GObjectSPtr<PangoLayout> createPangoLayout() const;
     void updatePangoFont(PangoLayout* layout) const;
 
@@ -81,4 +84,5 @@ private:
     double rotation = 0.0;  // radians, accumulated via rotate()
 
     bool inEditing = false;
+    bool underline = false;
 };

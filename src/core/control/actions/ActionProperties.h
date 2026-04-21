@@ -797,6 +797,36 @@ struct ActionProperties<Action::FONT> {
 };
 
 template <>
+struct ActionProperties<Action::TEXT_BOLD> {
+    using state_type = bool;
+    static constexpr state_type initialState(Control*) { return false; }
+    static void callback(GSimpleAction* ga, GVariant* p, Control* ctrl) {
+        g_simple_action_set_state(ga, p);
+        ctrl->setTextBold(g_variant_get_boolean(p));
+    }
+};
+
+template <>
+struct ActionProperties<Action::TEXT_ITALIC> {
+    using state_type = bool;
+    static constexpr state_type initialState(Control*) { return false; }
+    static void callback(GSimpleAction* ga, GVariant* p, Control* ctrl) {
+        g_simple_action_set_state(ga, p);
+        ctrl->setTextItalic(g_variant_get_boolean(p));
+    }
+};
+
+template <>
+struct ActionProperties<Action::TEXT_UNDERLINE> {
+    using state_type = bool;
+    static constexpr state_type initialState(Control*) { return false; }
+    static void callback(GSimpleAction* ga, GVariant* p, Control* ctrl) {
+        g_simple_action_set_state(ga, p);
+        ctrl->setTextUnderline(g_variant_get_boolean(p));
+    }
+};
+
+template <>
 struct ActionProperties<Action::AUDIO_RECORD> {
     using state_type = bool;
     static constexpr state_type initialState(Control*) { return false; }

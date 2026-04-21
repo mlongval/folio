@@ -177,6 +177,11 @@ public:
     void setFontSelected(const XojFont& font);  ///< Modifies the Action state without triggering callbacks
     void fontChanged(const XojFont& font);      ///< Set the font after the user selected a font
 
+    void setTextBold(bool bold);
+    void setTextItalic(bool italic);
+    void setTextUnderline(bool underline);
+    void syncTextFormattingState(const XojFont& font, bool underline);  ///< Sync B/I/U action states from element
+
     void updatePageNumbers(size_t page, size_t pdfPage);
 
     /**
