@@ -322,7 +322,7 @@ void ensure_input_model_compatibility() {
  */
 auto findResourcePath(const fs::path& searchFile) -> fs::path {
     auto search_for = [&searchFile](fs::path start) -> std::optional<fs::path> {
-        constexpr auto* postfix = "share/xournalpp";
+        const std::string postfix = std::string("share/") + PROJECT_NAME;
         /// 1. relative install
         /// 2. windows install
         /// 3. build dir

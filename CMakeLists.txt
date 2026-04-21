@@ -391,6 +391,10 @@ install(DIRECTORY ui
         DESTINATION "share/folio"
         COMPONENT xournalpp
         )
+install(FILES "${CMAKE_BINARY_DIR}/resources-templates/toolbar.ini"
+        DESTINATION "share/folio/ui"
+        COMPONENT xournalpp
+        )
 install(DIRECTORY plugins
         DESTINATION "share/folio"
         COMPONENT xournalpp
