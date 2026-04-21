@@ -1,5 +1,6 @@
 #include "TextEditor.h"
 
+#include <cmath>    // for std::abs, std::cos, std::sin
 #include <cstring>  // for strcmp, size_t
 #include <memory>   // for allocator, make_unique, __shared_p...
 #include <string>   // for std::string()
@@ -874,8 +875,13 @@ void TextEditor::blinkCallback(TextEditor* te) {
     auto time = te->cursorVisible ? te->cursorBlinkingTimeOn : te->cursorBlinkingTimeOff;
     te->blinkTimer = g_timeout_add(time, xoj::util::wrap_for_once_v<blinkCallback>, te);
 
-    Range dirtyRange = te->cursorBox;
-    dirtyRange.translate(te->textElement->getX(), te->textElement->getY());
+    Range dirtyRange = (te->textElement->getRotation() != 0.0)
+                               ? te->previousBoundingBox
+                               : [&] {
+                                     Range r = te->cursorBox;
+                                     r.translate(te->textElement->getX(), te->textElement->getY());
+                                     return r;
+                                 }();
     te->viewPool->dispatch(xoj::view::TextEditionView::FLAG_DIRTY_REGION, dirtyRange);
 }
 
@@ -934,6 +940,18 @@ auto TextEditor::computeBoundingBox() const -> Range {
     double x = textElement->getX();
     double y = textElement->getY();
 
+    if (double r = textElement->getRotation(); r != 0.0) {
+        double c = std::abs(std::cos(r));
+        double s = std::abs(std::sin(r));
+        double aabbW = std::abs(width) * c + height * s;
+        double aabbH = std::abs(width) * s + height * c;
+        double cx = x + width / 2.0;
+        double cy = y + height / 2.0;
+        Range res(cx - aabbW / 2.0, cy - aabbH / 2.0);
+        res.addPoint(cx + aabbW / 2.0, cy + aabbH / 2.0);
+        return res;
+    }
+
     // Warning: width can be negative (e.g. for languages written from right to left)
     Range res(x, y);
     res.addPoint(x + width, y + height);
@@ -989,10 +1007,14 @@ void TextEditor::repaintEditor(bool sizeChanged) {
 }
 
 void TextEditor::repaintCursorAfterChange() {
-    Range dirtyRange = this->cursorBox;
     this->updateCursorBox();
-    dirtyRange = dirtyRange.unite(this->cursorBox);
-    dirtyRange.translate(this->textElement->getX(), this->textElement->getY());
+    Range dirtyRange = (this->textElement->getRotation() != 0.0)
+                               ? this->previousBoundingBox
+                               : [&] {
+                                     Range r = this->cursorBox;
+                                     r.translate(this->textElement->getX(), this->textElement->getY());
+                                     return r;
+                                 }();
     this->viewPool->dispatch(xoj::view::TextEditionView::FLAG_DIRTY_REGION, dirtyRange);
 }
 
