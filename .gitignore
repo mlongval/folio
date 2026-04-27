@@ -51,6 +51,10 @@ flatpak-build/
 .flatpak-builder/
 *.flatpak
 
+# AppImage
+AppDir/
+*.AppImage
+
 # Lua
 lua-*
 

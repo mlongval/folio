@@ -141,16 +141,7 @@
      <attribute name="action">win.move-selection-layer-down</attribute>
     </item>
    </section>
-   <section>
-    <item>
-     <attribute name="label" translatable="yes">Rotation Snapping</attribute>
-     <attribute name="action">win.rotation-snapping</attribute>
-    </item>
-    <item>
-     <attribute name="label" translatable="yes">Grid Snapping</attribute>
-     <attribute name="action">win.grid-snapping</attribute>
-    </item>
-   </section>
+
    <section>
     <item>
      <attribute name="label" translatable="yes">Preferences</attribute>
@@ -551,11 +542,7 @@
      <attribute name="target" type="t">5</attribute> <!-- TOOL_IMAGE -->
      <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;i</attribute>
     </item>
-    <item>
-     <attribute name="label" translatable="yes">_Default Tool</attribute>
-     <attribute name="action">win.select-default-tool</attribute>
-     <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;d</attribute>
-    </item>
+
    </section>
    <section>
     <submenu>
@@ -631,24 +618,14 @@
      <attribute name="target" type="t">10</attribute> <!-- TOOL_SELECT_OBJECT -->
      <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;o</attribute>
     </item>
-    <item>
-     <attribute name="label" translatable="yes">_Vertical Space</attribute>
-     <attribute name="action">win.select-tool</attribute>
-     <attribute name="target" type="t">12</attribute> <!-- TOOL_VERTICAL_SPACE -->
-     <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;v</attribute>
-    </item>
+
     <item>
      <attribute name="label" translatable="yes">Play Object</attribute>
      <attribute name="action">win.select-tool</attribute>
      <attribute name="target" type="t">11</attribute> <!-- TOOL_PLAY_OBJECT -->
      <attribute name="class">audio</attribute> <!-- Gets removed when audio is disabled -->
     </item>
-    <item>
-     <attribute name="label" translatable="yes">_Pan (Scroll Canvas)</attribute>
-     <attribute name="action">win.select-tool</attribute>
-     <attribute name="target" type="t">13</attribute> <!-- TOOL_HAND -->
-     <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;a</attribute>
-    </item>
+
    </section>
    <section>
     <submenu>
@@ -839,11 +816,7 @@
      <attribute name="action">win.audio-seek-backwards</attribute>
      <attribute name="class">audio</attribute> <!-- Gets removed when audio is disabled -->
     </item>
-    <item>
-     <attribute name="label" translatable="yes">Add/Edit TeX</attribute>
-     <attribute name="action">win.tex</attribute>
-     <attribute name="accel">&lt;Ctrl&gt;&lt;Shift&gt;x</attribute>
-    </item>
+
    </section>
   </submenu>
   <submenu>
